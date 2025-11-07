@@ -9,11 +9,15 @@
 
 // export default Shop;
 import ShopByCategory from "../components/ShopbyCategory";
-
+import ExploreByOccasion from "../components/ExploreByOccasion";
+import ExploreByRegion from "../components/ExploreByRegion";
 export default function Shop() {
   return (
     <div>
       <ShopByCategory />
+       {/* New Explore by Occasion Section */}
+      <ExploreByOccasion />
+         <ExploreByRegion />
     </div>
   );
 }

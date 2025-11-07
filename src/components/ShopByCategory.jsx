@@ -3,19 +3,19 @@ import { useState } from "react";
 
 const products = {
   women: [
-    { name: "Silk Saree", price: "₹2,499", rating: 4.5, desc: "Elegant ethnic silk saree", image: "https://ultralytics.net/images/bus.jpg" },
-    { name: "Lehenga Set", price: "₹4,999", rating: 4.8, desc: "Traditional bridal lehenga", image: "https://via.placeholder.com/200x200?text=Lehenga+Set" },
-    { name: "Kurti", price: "₹1,199", rating: 4.3, desc: "Comfortable cotton kurti", image: "https://via.placeholder.com/200x200?text=Kurti" },
+    { name: "Silk Saree", price: "₹2,499", rating: 4.5, desc: "Elegant ethnic silk saree", image: "https://vardanethnic.in/wp-content/uploads/2025/08/Vardan-Ethnic-Ast-Shubharambh-Wholesale-Banarasi-Silk-Saree-Collection-6.webp" },
+    { name: "Lehenga Set", price: "₹4,999", rating: 4.8, desc: "Traditional bridal lehenga", image: "https://maharanidesigner.com/wp-content/uploads/2020/08/Punjabi-Bridal-Lehenga.jpeg.webp" },
+    { name: "Kurti", price: "₹1,199", rating: 4.3, desc: "Comfortable cotton kurti", image: "https://wholetex.sgp1.cdn.digitaloceanspaces.com/full/women-printed-cotton-kurti-pant-or-dupatta-set-216.jpg" },
   ],
   men: [
-    { name: "Sherwani", price: "₹3,999", rating: 4.7, desc: "Royal embroidered sherwani", image: "https://via.placeholder.com/200x200?text=Sherwani" },
-    { name: "Kurta Pajama", price: "₹1,799", rating: 4.4, desc: "Classic festive wear", image: "https://via.placeholder.com/200x200?text=Kurta+Pajama" },
-    { name: "Nehru Jacket", price: "₹1,299", rating: 4.6, desc: "Stylish Nehru jacket", image: "https://via.placeholder.com/200x200?text=Nehru+Jacket" },
+    { name: "Sherwani", price: "₹3,999", rating: 4.7, desc: "Royal embroidered sherwani", image: "https://i.pinimg.com/736x/90/6c/31/906c31109cfc073f74aaba9e07712947.jpg" },
+    { name: "Kurta Pajama", price: "₹1,799", rating: 4.4, desc: "Classic festive wear", image: "https://i.etsystatic.com/35384727/r/il/f45eaa/6357957683/il_fullxfull.6357957683_4sny.jpg" },
+    { name: "Nehru Jacket", price: "₹1,299", rating: 4.6, desc: "Stylish Nehru jacket", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaS2QB_8y1jKvfY_-1U_QR_RcG_5y07THy9g&s" },
   ],
   kids: [
-    { name: "Ethnic Set", price: "₹999", rating: 4.5, desc: "Traditional festive outfit", image: "https://via.placeholder.com/200x200?text=Ethnic+Set" },
-    { name: "Kurta Set", price: "₹899", rating: 4.2, desc: "Comfortable cotton kurta", image: "https://via.placeholder.com/200x200?text=Kurta+Set" },
-    { name: "Frock", price: "₹1,099", rating: 4.7, desc: "Beautiful party frock", image: "https://via.placeholder.com/200x200?text=Frock" },
+    { name: "Ethnic Set", price: "₹999", rating: 4.5, desc: "Traditional festive outfit", image: "https://peekaabookids.com/cdn/shop/files/173_b1966b97-0cec-4166-aa24-82fd72e40f74.jpg?v=1756801554&width=533" },
+    { name: "Kurta Set", price: "₹899", rating: 4.2, desc: "Comfortable cotton kurta", image: "https://www.kidbea.com/cdn/shop/files/m1_1024x1024.jpg?v=1754552947" },
+    { name: "Frock", price: "₹1,099", rating: 4.7, desc: "Beautiful party frock", image: "https://lagorii.com/cdn/shop/files/purple-ruffled-net-tailback-frock-with-floral-and-butterfly-embellishment-for-girls-lagorii-kids-1_533x.jpg" },
   ],
 };
 
@@ -29,7 +29,7 @@ export default function ShopByCategory() {
   };
 
   return (
-    <div className="px-8 py-16 bg-[#fdfbe8] min-h-screen">
+    <div className="px-8 pt-16 pb-8 bg-[#fdfbe8] border-t-4 border-orange-300 ">
       {/* Category Section */}
       {!selectedCategory && (
         <section id="categories">
