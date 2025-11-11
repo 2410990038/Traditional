@@ -30,13 +30,11 @@
 // }
 
 import { useState } from "react";
-import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
-import LoginModal from "./LoginModal";
+
 
 // import LandingPage from "./src/Landing.png";
 
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
 
 /*
   This component holds the "user database" in memory for demo purposes.
@@ -86,11 +84,7 @@ export default function LandingPage() {
 
   return (
     <div>
-      <Navbar
-        onLoginClick={openLogin}
-        isLoggedIn={isLoggedIn}
-        onLogout={handleLogout}
-      />
+    
       <HeroSection onStartShopping={openLogin} isLoggedIn={isLoggedIn} />
       
       {/* {showLogin && (
