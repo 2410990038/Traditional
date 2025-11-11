@@ -67,7 +67,7 @@ export default function CartPage() {
   if (loading) {
     return (
       <div className="p-10 bg-[#fdfbe8] min-h-screen">
-        <h1 className="text-4xl font-bold text-center mb-10">🛒 Your Cart</h1>
+        <h1 className="text-4xl font-bold text-center mb-10 ">🛒 Your Cart</h1>
         <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-6">
           <div className="space-y-4">
             {[...Array(3)].map((_, i) => (
@@ -92,7 +92,7 @@ export default function CartPage() {
   if (cart.length === 0) {
     return (
       <div className="p-10 bg-[#fdfbe8] min-h-screen">
-        <h1 className="text-4xl font-bold text-center mb-10">🛒 Your Cart</h1>
+        <h1 className="text-4xl font-bold text-center mb-10 mt-20">🛒 Your Cart</h1>
         <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-12 text-center">
           <p className="text-3xl mb-4">🛍️</p>
           <p className="text-2xl font-semibold text-gray-700 mb-4">Your bag is empty!</p>

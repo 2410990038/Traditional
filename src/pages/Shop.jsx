@@ -73,7 +73,7 @@ export default function Shop() {
   const { cart } = useCart(); // get cart items
 
   return (
-    <div>
+    <div className="pt-18">
       <ShopByCategory />
       <ExploreByOccasion />
       <ExploreByRegion />

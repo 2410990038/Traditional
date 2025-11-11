@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useCart } from "../context/CartContext";
 
 const products = {
   women: [
@@ -20,76 +21,30 @@ const products = {
 
 export default function ShopByCategory() {
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [cart, setCart] = useState([]);
-
-  // Load cart from localStorage on component mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      try {
-        setCart(JSON.parse(savedCart));
-      } catch (error) {
-        console.error("Error loading cart from localStorage:", error);
-        setCart([]);
-      }
-    }
-  }, []);
-
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
-
-  // Add item to cart or increase quantity
-  const addToCart = (product) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id);
-
-      if (existingItem) {
-        return prevCart.map((item) =>
-          item.id === product.id ? { ...item, qty: item.qty + 1 } : item
-        );
-      } else {
-        return [...prevCart, { ...product, qty: 1 }];
-      }
-    });
-  };
-
-  // Remove item from cart
-  const removeFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
-  };
+  const { cart, addToCart, removeFromCart, updateQuantity } = useCart();
 
   // Update quantity
-  const updateQuantity = (productId, newQty) => {
-    if (newQty <= 0) {
-      removeFromCart(productId);
-      return;
-    }
-
-    setCart((prevCart) =>
-      prevCart.map((item) => (item.id === productId ? { ...item, qty: newQty } : item))
-    );
+  const handleUpdateQuantity = (productId, newQty) => {
+    updateQuantity(productId, newQty);
   };
 
   const handleBuyNow = (productName) => {
     alert(`You are buying ${productName}! Redirecting to checkout...`);
   };
 
-  const cartItemCount = cart.reduce((sum, item) => sum + item.qty, 0);
-  const cartTotal = cart.reduce((sum, item) => sum + item.priceValue * item.qty, 0);
+  const cartItemCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+  const cartTotal = cart.reduce((sum, item) => sum + item.priceValue * (item.qty || 1), 0);
 
-  // Handler to open category — DO NOT clear or modify cart here.
+  // Handler to open category — cart persists across category changes
   const openCategory = (cat) => {
     setSelectedCategory(cat);
-    // IMPORTANT: do NOT call setCart([]) or filter cart here. Cart must persist across category changes.
   };
 
   return (
-    <div className="px-8 pt-16 pb-8 bg-[#fdfbe8] border-t-4 border-orange-300">
+    <div className="px-8 pt-16 pb-8 bg-[#fdfbe8] border-t-4 border-orange-300 ">
       {!selectedCategory && (
         <section id="categories">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex justify-between items-center max-w-6xl mx-auto px-4 mb-10">
             <div>
               <h2 className="text-4xl font-bold mb-2">Shop by Category</h2>
               <p className="text-gray-600">
@@ -103,7 +58,7 @@ export default function ShopByCategory() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto px-4">
             {["women", "men", "kids"].map((cat) => (
               <div
                 key={cat}
@@ -155,14 +110,14 @@ export default function ShopByCategory() {
                   {cartItem ? (
                     <div className="flex items-center gap-2 mt-4">
                       <button
-                        onClick={() => updateQuantity(p.id, cartItem.qty - 1)}
+                        onClick={() => handleUpdateQuantity(p.id, (cartItem.qty || 1) - 1)}
                         className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg"
                       >
                         −
                       </button>
-                      <span className="flex-1 text-center font-semibold">{cartItem.qty}</span>
+                      <span className="flex-1 text-center font-semibold">{cartItem.qty || 1}</span>
                       <button
-                        onClick={() => updateQuantity(p.id, cartItem.qty + 1)}
+                        onClick={() => handleUpdateQuantity(p.id, (cartItem.qty || 1) + 1)}
                         className="bg-green-500 hover:bg-green-600 text-white px-3 py-2 rounded-lg"
                       >
                         +
@@ -177,14 +132,14 @@ export default function ShopByCategory() {
                   ) : (
                     <div className="flex gap-2 mt-4">
                       <button
-                        onClick={() => addToCart(p)}
+                        onClick={() => addToCart({ ...p, qty: 1 })}
                         className="flex-1 bg-orange-500 text-white py-2 rounded hover:bg-orange-600"
                       >
                         Add to Bag
                       </button>
                       <button
                         onClick={() => {
-                          addToCart(p);
+                          addToCart({ ...p, qty: 1 });
                           handleBuyNow(p.name);
                         }}
                         className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700"
@@ -206,10 +161,10 @@ export default function ShopByCategory() {
                   <li key={item.id} className="py-3 flex justify-between items-center">
                     <div className="flex-1">
                       <span className="font-medium text-gray-700">{item.name}</span>
-                      <span className="text-gray-500 text-sm ml-2">× {item.qty}</span>
+                      <span className="text-gray-500 text-sm ml-2">× {item.qty || 1}</span>
                     </div>
                     <span className="text-green-700 font-semibold">
-                      ₹{(item.priceValue * item.qty).toLocaleString()}
+                      ₹{(item.priceValue * (item.qty || 1)).toLocaleString()}
                     </span>
                   </li>
                 ))}

@@ -127,13 +127,18 @@
 
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-// use image from public folder to avoid bundler/import issues
 import LearnMoreModal from "../components/LearnMoreModal";
 import bgImage from "../assets/landing.png";
-import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/clerk-react';
+import { SignedIn, SignedOut, useAuth } from '@clerk/clerk-react';
+
 export default function HeroSection() {
   const navigate = useNavigate();
+  const { isSignedIn } = useAuth();
   const [showLearnMore, setShowLearnMore] = useState(false);
+
+  const handleStartShopping = () => {
+    navigate("/shop");
+  };
 
   return (
     <div
@@ -149,7 +154,7 @@ export default function HeroSection() {
 
       {/* Main Content */}
       <div className="relative z-10 max-w-3xl px-6 animate-fadeIn">
-        <h1 className="text-5xl md:text-6xl font-bold mb-4 text-orange-500 drop-shadow-lg">
+        <h1 className="text-5xl md:text-6xl font-bold mb-4 text-orange-400 drop-shadow-lg">
           Traditional Elegance, Modern Fit
         </h1>
 
@@ -159,11 +164,12 @@ export default function HeroSection() {
         </p>
 
         <div className="flex flex-wrap justify-center gap-4">
-        <SignInButton
-            afterSignInUrl="/shop"
-            afterSignUpUrl="/shop"
-          className="bg-orange-500 text-white px-8 py-3 rounded-md hover:bg-orange-600 transition-all shadow-md"
-        />
+          <button
+            onClick={handleStartShopping}
+            className="bg-orange-500 text-white px-8 py-3 rounded-md hover:bg-orange-600 transition-all shadow-md"
+          >
+            Start Shopping
+          </button>
 
           <button
             onClick={() => setShowLearnMore(true)}
@@ -176,7 +182,6 @@ export default function HeroSection() {
 
       {/* Learn More Modal */}
       {showLearnMore && <LearnMoreModal onClose={() => setShowLearnMore(false)} />}
-
     </div>
   );
 }

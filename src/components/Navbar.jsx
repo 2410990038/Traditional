@@ -3,8 +3,8 @@ import {
   SignedOut, 
   SignInButton, 
   useUser, 
-  UserButton,
-  useAuth 
+  useAuth,
+  useClerk
 } from "@clerk/clerk-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -12,10 +12,12 @@ import { FaShoppingCart } from "react-icons/fa";
 
 export default function Navbar() {
   const { user } = useUser();
+  const { signOut } = useClerk();
   const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
   const { isSignedIn } = useAuth();
   const [cartCount, setCartCount] = useState(0);
+  
 
   // Listen for cart updates
   useEffect(() => {
@@ -49,15 +51,6 @@ export default function Navbar() {
         ReetRiwaaz
       </button>
 
-      <div className="hidden md:flex items-center gap-6 text-gray-700 font-medium">
-        <button className="hover:text-orange-600 transition" onClick={() => navigate("/")}>
-          Home
-        </button>
-        <button className="hover:text-orange-600 transition" onClick={() => navigate("/shop")}>
-          Shop
-        </button>
-      </div>
-
       <div className="flex items-center gap-4">
         <button
           onClick={() => navigate("/cart")}
@@ -87,21 +80,7 @@ export default function Navbar() {
             {showProfile && (
               <>
                 <div className="absolute right-0 mt-12 w-56 bg-white shadow-xl rounded-lg border border-gray-200 p-4 z-40">
-                  <div className="flex items-center gap-3 mb-3">
-                    <img
-                      src={user?.imageUrl || "https://via.placeholder.com/40"}
-                      alt="User"
-                      className="w-10 h-10 rounded-full"
-                    />
-                    <div>
-                      <p className="font-semibold text-gray-800">{user?.fullName || "User"}</p>
-                      <p className="text-sm text-gray-500">
-                        {user?.primaryEmailAddress?.emailAddress}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-gray-200 my-3 pt-3 space-y-2">
+                  <div className="space-y-2">
                     <button
                       onClick={() => {
                         navigate("/cart");
@@ -111,10 +90,23 @@ export default function Navbar() {
                     >
                       🛒 My Cart ({cartCount})
                     </button>
-                  </div>
 
-                  <div className="border-t border-gray-200 my-3 pt-3">
-                    <UserButton afterSignOutUrl="/" />
+                    <button
+                      onClick={() => {
+                        navigate("/user-profile");
+                        setShowProfile(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-gray-700 hover:bg-blue-50 rounded transition border-t border-gray-200 mt-2 pt-2"
+                    >
+                      ⚙️ Manage Account
+                    </button>
+
+                    <button
+                      onClick={() => signOut(() => navigate("/"))}
+                      className="w-full text-left px-3 py-2 text-gray-700 hover:bg-red-50 rounded transition"
+                    >
+                      🚪 Sign Out
+                    </button>
                   </div>
                 </div>
                 <div
