@@ -112,6 +112,16 @@ export default function Navbar() {
                     </button>
 
                     <button
+                      onClick={() => {
+                        navigate("/orders");
+                        setShowProfile(false);
+                      }}
+                      className="w-full text-left px-3 py-2 text-gray-700 hover:bg-yellow-50 rounded transition"
+                    >
+                      📦 Order History
+                    </button>
+
+                    <button
                       onClick={() => signOut(() => navigate("/"))}
                       className="w-full text-left px-3 py-2 text-gray-700 hover:bg-red-50 rounded transition"
                     >

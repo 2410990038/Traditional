@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useUser } from "@clerk/clerk-react";
 import { sendOrderEmail } from "../utils/emailService";
 
 export default function Payment() {
   const navigate = useNavigate();
   const { cart, clearCart } = useCart();
+  const { user } = useUser();
   const [method, setMethod] = useState("cod"); // cod | upi | card
   const [processing, setProcessing] = useState(false);
 
@@ -40,6 +42,8 @@ export default function Payment() {
       const orderId = `RR-${Date.now().toString().slice(-8)}`;
       const order = {
         id: orderId,
+        userId: user?.id || null,
+        userEmail: user?.primaryEmailAddress?.emailAddress || checkoutData?.email || null,
         items: cart,
         totals: {
           subtotal: cartSubtotal,
@@ -56,9 +60,15 @@ export default function Payment() {
       try {
         localStorage.setItem("lastOrder", JSON.stringify(order));
       } catch {}
+      // Save to per-user order history
+      try {
+        const historyKey = user?.id ? `orders:${user.id}` : "orders:guest";
+        const prev = JSON.parse(localStorage.getItem(historyKey) || "[]");
+        localStorage.setItem(historyKey, JSON.stringify([order, ...prev]));
+      } catch {}
       // Fire-and-forget email (requires VITE_ORDER_EMAIL_WEBHOOK_URL)
       try {
-        const to = checkoutData?.email;
+        const to = order.userEmail;
         if (to) {
           // do not await to keep UI responsive
           sendOrderEmail({ to, order }).catch(() => {});
