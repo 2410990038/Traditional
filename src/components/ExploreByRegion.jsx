@@ -1,26 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const ExploreByRegion = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
-  const [cart, setCart] = useState([]);
-
-  // Load cart from localStorage on component mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      try {
-        setCart(JSON.parse(savedCart));
-      } catch (error) {
-        console.error("Error loading cart from localStorage:", error);
-        setCart([]);
-      }
-    }
-  }, []);
-
-  // Save cart to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+  const { cart, addToCart, removeFromCart, updateQuantity } = useCart();
+  const navigate = useNavigate();
 
   const regionData = {
     Rajasthan: [
@@ -163,53 +148,14 @@ const ExploreByRegion = () => {
     },
   ];
 
-  // Add item to cart or increase quantity
-  const addToCart = (product) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id);
-
-      if (existingItem) {
-        // Item exists, increase quantity
-        return prevCart.map((item) =>
-          item.id === product.id
-            ? { ...item, qty: item.qty + 1 }
-            : item
-        );
-      } else {
-        // New item, add to cart
-        return [...prevCart, { ...product, qty: 1 }];
-      }
-    });
-  };
-
-  // Remove item from cart
-  const removeFromCart = (productId) => {
-    setCart((prevCart) =>
-      prevCart.filter((item) => item.id !== productId)
-    );
-  };
-
-  // Update quantity
-  const updateQuantity = (productId, newQty) => {
-    if (newQty <= 0) {
-      removeFromCart(productId);
-      return;
-    }
-
-    setCart((prevCart) =>
-      prevCart.map((item) =>
-        item.id === productId ? { ...item, qty: newQty } : item
-      )
-    );
-  };
 
   const handleBuyNow = (productName) => {
     alert(`You are buying ${productName}! Redirecting to checkout...`);
   };
 
   // Cart summary info
-  const cartItemCount = cart.reduce((sum, item) => sum + item.qty, 0);
-  const cartTotal = cart.reduce((sum, item) => sum + item.priceValue * item.qty, 0);
+  const cartItemCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+  const cartTotal = cart.reduce((sum, item) => sum + (item.priceValue || 0) * (item.qty || 1), 0);
 
   return (
     <section className="pb-20 pt-10 bg-[#fffde8] border-t-4 border-orange-300">
@@ -337,7 +283,7 @@ const ExploreByRegion = () => {
               ← Back to Regions
             </button>
             {cartItemCount > 0 && (
-              <button className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">
+              <button onClick={() => navigate('/cart')} className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">
                 View Cart ({cartItemCount})
               </button>
             )}

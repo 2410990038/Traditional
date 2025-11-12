@@ -3,23 +3,25 @@ import { createContext, useContext, useState, useEffect } from "react";
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
-
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cart");
-    if (savedCart) {
-      try {
-        setCart(JSON.parse(savedCart));
-      } catch (error) {
-        console.error("Error loading cart:", error);
-      }
+  // Initialize from localStorage synchronously to avoid wiping cart on reload
+  const [cart, setCart] = useState(() => {
+    try {
+      const saved = localStorage.getItem("cart");
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.error("Error loading cart:", error);
+      return [];
     }
-  }, []);
+  });
 
-  // Save cart to localStorage whenever it changes
+  // Save cart to localStorage whenever it changes and notify listeners (Navbar, etc.)
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    try {
+      localStorage.setItem("cart", JSON.stringify(cart));
+      window.dispatchEvent(new Event("cartUpdated"));
+    } catch (err) {
+      // ignore if window is unavailable (SSR) or event dispatch fails
+    }
   }, [cart]);
 
   const addToCart = (product) => {
@@ -54,10 +56,42 @@ export function CartProvider({ children }) {
     setCart((prev) => prev.filter((item) => item.id !== productId));
   };
 
+  // Fittings helpers for consumers (e.g., CartPage)
+  const applyFittingsToItem = (productId, measurements) => {
+    setCart((prev) =>
+      prev.map((item) =>
+        item.id === productId ? { ...item, fitType: "custom", measurements } : item
+      )
+    );
+  };
+
+  const clearFittingsForItem = (productId) => {
+    setCart((prev) =>
+      prev.map((item) => {
+        if (item.id !== productId) return item;
+        const { fitType, measurements, ...rest } = item;
+        return rest;
+      })
+    );
+  };
+
+  const applyFittingsToAll = (measurements) => {
+    setCart((prev) => prev.map((item) => ({ ...item, fitType: "custom", measurements })));
+  };
+
+  const clearFittingsAll = () => {
+    setCart((prev) =>
+      prev.map((item) => {
+        const { fitType, measurements, ...rest } = item;
+        return rest;
+      })
+    );
+  };
+
   const clearCart = () => setCart([]);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, updateQuantity }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, clearCart, updateQuantity, applyFittingsToItem, clearFittingsForItem, applyFittingsToAll, clearFittingsAll }}>
       {children}
     </CartContext.Provider>
   );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 const products = {
   women: [
@@ -22,6 +23,7 @@ const products = {
 export default function ShopByCategory() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { cart, addToCart, removeFromCart, updateQuantity } = useCart();
+  const navigate = useNavigate();
 
   // Update quantity
   const handleUpdateQuantity = (productId, newQty) => {
@@ -153,34 +155,14 @@ export default function ShopByCategory() {
             })}
           </div>
 
-          {cartItemCount > 0 && (
-            <div className="mt-10 bg-white shadow-xl rounded-2xl p-6 max-w-3xl mx-auto border border-gray-200">
-              <h2 className="text-2xl font-bold text-center mb-4">🛍️ Items in Your Bag</h2>
-              <ul className="divide-y divide-gray-200 max-h-64 overflow-y-auto">
-                {cart.map((item) => (
-                  <li key={item.id} className="py-3 flex justify-between items-center">
-                    <div className="flex-1">
-                      <span className="font-medium text-gray-700">{item.name}</span>
-                      <span className="text-gray-500 text-sm ml-2">× {item.qty || 1}</span>
-                    </div>
-                    <span className="text-green-700 font-semibold">
-                      ₹{(item.priceValue * (item.qty || 1)).toLocaleString()}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <div className="text-right mt-4 border-t pt-4">
-                <div className="font-semibold text-lg">Total: ₹{cartTotal.toLocaleString()}</div>
-              </div>
-            </div>
-          )}
+          {/* Removed in-page mini cart to avoid popup while adding items */}
 
           <div className="flex justify-center gap-4 mt-10">
             <button onClick={() => setSelectedCategory(null)} className="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600">
               ← Back to Categories
             </button>
             {cartItemCount > 0 && (
-              <button className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">
+              <button onClick={() => navigate('/cart')} className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600">
                 View Cart ({cartItemCount})
               </button>
             )}

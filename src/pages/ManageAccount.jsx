@@ -198,6 +198,18 @@ export default function ManageAccount() {
             <p>✓ Email verified: {user?.primaryEmailAddress?.verification?.status === "verified" ? "Yes" : "Pending"}</p>
           </div>
         </div>
+
+        {/* Fittings quick access */}
+        <div className="bg-white rounded-lg shadow-md p-8 mt-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-2">Fittings & Alterations</h2>
+          <p className="text-gray-600 mb-4">Save your measurements for faster checkout and perfect fit.</p>
+          <button
+            onClick={() => navigate("/fittings")}
+            className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-orange-600 transition"
+          >
+            Open Fittings Page
+          </button>
+        </div>
       </div>
     </div>
   );
