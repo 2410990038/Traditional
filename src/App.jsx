@@ -10,7 +10,7 @@ import BuyNow from "./pages/BuyNow";
 import ManageAccount from "./pages/ManageAccount";
 import Fittings from "./pages/Fittings";
 import Checkout from "./pages/Checkout";
-import Payment from "./pages/Payment";
+import Payment from "./pages/payment";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import OrderHistory from "./pages/OrderHistory";
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
