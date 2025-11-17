@@ -65,7 +65,7 @@
 // }
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
-import ShopByCategory from "../components/ShopbyCategory";
+import ShopByCategory from "../components/ShopByCategory";
 import ExploreByOccasion from "../components/ExplorebyOccasion";
 import ExploreByRegion from "../components/ExploreByRegion";
 
