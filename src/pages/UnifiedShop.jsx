@@ -129,7 +129,10 @@ export default function UnifiedShop() {
               Add to Bag
             </button>
             <button
-              onClick={() => addToCart(product)}
+              onClick={() => {
+                addToCart(product);
+                navigate("/checkout");
+              }}
               className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700 text-sm font-semibold"
             >
               Buy Now

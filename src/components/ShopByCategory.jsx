@@ -30,8 +30,10 @@ export default function ShopByCategory() {
     updateQuantity(productId, newQty);
   };
 
-  const handleBuyNow = (productName) => {
-    alert(`You are buying ${productName}! Redirecting to checkout...`);
+  // Buy Now: add item to cart (if not already) and go straight to checkout
+  const handleBuyNow = (product) => {
+    addToCart({ ...product, qty: 1 });
+    navigate("/checkout");
   };
 
   const cartItemCount = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
@@ -140,10 +142,7 @@ export default function ShopByCategory() {
                         Add to Bag
                       </button>
                       <button
-                        onClick={() => {
-                          addToCart({ ...p, qty: 1 });
-                          handleBuyNow(p.name);
-                        }}
+                        onClick={() => handleBuyNow(p)}
                         className="flex-1 bg-green-600 text-white py-2 rounded hover:bg-green-700"
                       >
                         Buy Now

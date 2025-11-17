@@ -149,8 +149,10 @@ const ExploreByRegion = () => {
   ];
 
 
-  const handleBuyNow = (productName) => {
-    alert(`You are buying ${productName}! Redirecting to checkout...`);
+  // Buy Now: add item to cart and go directly to checkout
+  const handleBuyNow = (product) => {
+    addToCart(product);
+    navigate("/checkout");
   };
 
   // Cart summary info
@@ -263,7 +265,7 @@ const ExploreByRegion = () => {
                         Add to Bag
                       </button>
                       <button
-                        onClick={() => handleBuyNow(p.name)}
+                        onClick={() => handleBuyNow(p)}
                         className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg w-1/2"
                       >
                         Buy Now
